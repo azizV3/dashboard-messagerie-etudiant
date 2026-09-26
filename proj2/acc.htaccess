@@ -1,0 +1,9 @@
+Options -Indexes
+
+<Files "config.php">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Forcer l'encodage en UTF-8
+AddDefaultCharset UTF-8
