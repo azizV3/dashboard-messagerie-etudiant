@@ -1,0 +1,4 @@
+config.local.php
+setup.lock
+.env
+.env.*

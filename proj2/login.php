@@ -4,7 +4,7 @@ require_once 'connect.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = htmlspecialchars($_POST['email']);
+    $email = trim($_POST['email'] ?? ''); // prepared statement handles SQL; no HTML-escaping before storage/lookup
     $password = $_POST['password'];
 
     $sql = "SELECT * FROM students WHERE email = :email";

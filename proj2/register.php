@@ -3,12 +3,20 @@ require_once 'connect.php';
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $full_name = htmlspecialchars($_POST['full_name']);
-    $email = htmlspecialchars($_POST['email']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $university = htmlspecialchars($_POST['university']);
+    // Store raw (trimmed) values: escaping is done when the data is OUTPUT,
+    // otherwise names like "O'Brien" are saved as "O&#039;Brien".
+    $full_name  = trim($_POST['full_name'] ?? '');
+    $email      = trim($_POST['email'] ?? '');
+    $university = trim($_POST['university'] ?? '');
+    $plain_pw   = $_POST['password'] ?? '';
+
+    if ($full_name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($plain_pw) < 8) {
+        $error = "Données invalides (email valide, mot de passe de 8 caractères minimum).";
+    }
+    $password = password_hash($plain_pw, PASSWORD_DEFAULT);
 
 
+    if ($error === '') {
     try {
         $sql = "INSERT INTO students (full_name, email, password, university) 
                 VALUES (:full_name, :email, :password, :university)";
@@ -24,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } catch(Exception $e) {
         $error = "Cet email est déjà utilisé.";
+    }
     }
 }
 ?>

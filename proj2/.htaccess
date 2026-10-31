@@ -1,0 +1,7 @@
+Options -Indexes
+AddDefaultCharset UTF-8
+
+# Never serve credentials, installer lock, or env files
+<FilesMatch "^(config\.local\.php|config\.example\.php|setup\.lock|\.env.*)$">
+    Require all denied
+</FilesMatch>
